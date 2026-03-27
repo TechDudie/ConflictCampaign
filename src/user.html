@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <title>ConflictCampaign - User</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Hi, <span id="username">nobody</span>!</h1>
+        <p>you are an innocent bystander! grab your favorite snack, sit down, and kick back as you watch the latest episode of Geopolitical Drama w/ AI-Powered Nukes unfold.</p>
+        <span id="footer"></span>
+    </body>
+    <script>
+        const footer = document.getElementById("footer");
+        const repoUrl = "https://github.com/TechDudie/ConflictCampaign";
+
+        async function setBuildFooter() {
+            try {
+                const response = await fetch("https://api.github.com/repos/TechDudie/ConflictCampaign/commits?per_page=1");
+                if (!response.ok) {
+                    throw new Error("Failed to fetch latest commit");
+                }
+
+                const commits = await response.json();
+                const sha = (commits[0]?.sha || "unknown").slice(0, 7);
+                footer.innerHTML = `<a href="${repoUrl}" target="_blank" rel="noopener noreferrer">Build ${sha} from 6 or 7 hours ago.</a>`;
+            } catch (error) {
+                footer.innerHTML = `<a href="${repoUrl}" target="_blank" rel="noopener noreferrer">Build unknown from 6 or 7 hours ago.</a>`;
+            }
+        }
+
+        function getCookie(name) {
+            const match = document.cookie.split('; ').find(row => row.startsWith(name + '='));
+            return match ? match.split('=')[1] : null;
+        }
+
+        function parsePayload(token) {
+            try {
+                if (!token) return null;
+                const parts = token.split('.');
+                if (parts.length < 2) return null;
+                let payload = parts[1];
+                // base64url -> base64
+                payload = payload.replace(/-/g, '+').replace(/_/g, '/');
+                // pad
+                const pad = payload.length % 4;
+                if (pad) payload += '='.repeat(4 - pad);
+                const decoded = atob(payload);
+                // atob can produce raw binary; decode percent-encoded string to get proper UTF-8
+                const json = decodeURIComponent(decoded.split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(json);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function setUsernameFromToken() {
+            const raw = getCookie('token');
+            if (!raw) return;
+            // cookie may be URL-encoded
+            const token = decodeURIComponent(raw);
+            const payload = parsePayload(token);
+            if (payload && payload.username) {
+                const el = document.getElementById('username');
+                if (el) el.textContent = payload.username;
+            }
+        }
+
+        setUsernameFromToken();
+        setBuildFooter();
+    </script>
+</html>

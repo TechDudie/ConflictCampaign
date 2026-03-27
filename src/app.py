@@ -1,7 +1,9 @@
+from datetime import datetime, timedelta
 from fastapi import Cookie, FastAPI, Form, HTTPException as FastAPIHTTPException, Request
 from fastapi.responses import JSONResponse, FileResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 import hashlib
+import jwt
 import math
 from pydantic import BaseModel
 from pyotp import random_base32 as baller, TOTP as authy
@@ -111,8 +113,10 @@ async def _login_submit(
 ):
     db = dber()
     cursor = db.cursor()
-    cursor.execute("SELECT password, role FROM users WHERE username = ?", (username,))
+    cursor.execute("SELECT username, password, role FROM users WHERE username = ?", (username,))
     row = cursor.fetchone()
+    cursor.execute("SELECT value FROM settings WHERE key = 'COMMON_BALL'")
+    ball = cursor.fetchone()[0]
     db.close()
 
     if not row:
@@ -120,11 +124,17 @@ async def _login_submit(
 
     # expected_password = hashlib.md5(username.encode("utf-8")).hexdigest() # NICE ONE CODEX
     expected_password = hashlib.md5(password.encode("utf-8")).hexdigest() # lmfao that gave me a good laugh
-    if expected_password != row[0]:
+    if expected_password != row[1]:
         return RedirectResponse(url="/login.html", status_code=302)
 
     response = RedirectResponse(url="/dashboard.html", status_code=302)
-    response.set_cookie("role", row[1])
+    response.set_cookie("role", row[2])
+    response.set_cookie("token", jwt.encode(
+        {
+            "username": username,
+            "role": row[2],
+            "exp": int((datetime.now() + timedelta(seconds=67)).timestamp())
+        }, ball, algorithm="HS256"))
     return response
 
 @app.get("/register.html")
@@ -133,11 +143,23 @@ async def _register():
 
 @app.get("/dashboard.html")
 async def _dashboard(
-    role: Optional[str] = Cookie(None)
+    token: Optional[str] = Cookie(None)
 ):
+    if not token:
+        return RedirectResponse(url="/login.html", status_code=302)
+    cursor = dber().cursor()
+    cursor.execute("SELECT value FROM settings WHERE key = 'COMMON_BALL'")
+    try:
+        payload = jwt.decode(token, cursor.fetchone()[0], algorithms=["HS256"]) if token else {}
+    except jwt.ExpiredSignatureError:
+        return RedirectResponse(url="/login.html", status_code=302)
+    except Exception:
+        return RedirectResponse(url="/login.html", status_code=302)
+
+    role = payload.get("role")
     if not role:
         return RedirectResponse(url="/login.html", status_code=302)
-    return FileResponse("src/dashboard.html")
+    return FileResponse("src/user.html" if role == "user" else "src/dashboard.html")
 
 @app.post("/api/register")
 async def _register_user(
@@ -151,6 +173,7 @@ class auther(BaseModel):
 
 @app.post("/api/launch-ai-powered-nukes")
 async def _launch_ai_powered_nukes(
+    token: Optional[str] = Cookie(None),
     role: Optional[str] = Cookie(None),
     auth: auther = None
 ):
