@@ -35,3 +35,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 __pycache__/
 .py[cod]
+
+# production db
+default.db
