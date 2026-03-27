@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>ConflictCampaign - Register</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Registration is currently closed bc we are ALL busy sliming out Derek</h1>
+        <h1>On a completely unrelated side note hx is the absolute goat</h1>
+        <pre>latency critical endpoints where using python to process large amounts of uncacheable data would degrade ux</pre>
+        <h3><i>SME Server of Direct Democracy<br>&nbsp;&nbsp;&nbsp;&nbsp;#democratic-annoucements<br>&nbsp;&nbsp;&nbsp;&nbsp;#requests-for-the-president</i></h3>
+        <h1>imma be fr none of the stuff you read above should be used to solve ts chall i'm just finding red herrings to put here intentionally atp</h1>
+        <form style="display: none" method="POST" action="/api/register">
+            <div>
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" required>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" required>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <script>
+            function register_demo_user() {
+                fetch("/api/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams({
+                        username: "clanker",
+                        password: "W3_<3_AI_SL0P",
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            }
+        </script>
+    </body>
+</html>
