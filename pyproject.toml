@@ -1,0 +1,9 @@
+[project]
+name = "ConflictCampaign"
+version = "0.1.0"
+description = "ConflictCampaign is your all-in-one <u>***AI-powered***</u> war tool for maintaining conflict campaigns!"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.135.2",
+]
