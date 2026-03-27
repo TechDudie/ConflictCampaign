@@ -1,5 +1,217 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&display=swap');
 
-h1, h2, h3, h4, h5, h6, p, a, span, div, pre {
+:root {
+    --bg-color: #f0f0ed;
+    --text-color: #111111;
+    --accent-red: #ff3333;
+    --accent-blue: #0055ff;
+    --accent-yellow: #ffff00;
+    --border-width: 4px;
+    --brutal-shadow: 6px 6px 0px 0px var(--text-color);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: radial-gradient(var(--text-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: var(--text-color);
     font-family: 'JetBrains Mono', monospace;
+    margin: 0;
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Unbounded', sans-serif;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin-top: 0;
+    text-align: center;
+    background: var(--text-color);
+    color: var(--bg-color);
+    padding: 1rem 2rem;
+    border: var(--border-width) solid var(--text-color);
+    box-shadow: 10px 10px 0px 0px var(--accent-red);
+    transform: rotate(-1deg);
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 800px;
+}
+
+h3 i {
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: normal;
+}
+
+p, pre, span, label {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+p {
+    background: white;
+    padding: 1rem 2rem;
+    border: 3px solid var(--text-color);
+    box-shadow: 6px 6px 0px 0px var(--accent-blue);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+pre {
+    background: var(--text-color);
+    color: var(--accent-yellow);
+    padding: 1rem;
+    border-radius: 0;
+    border: var(--border-width) solid var(--text-color);
+    box-shadow: var(--brutal-shadow);
+    white-space: pre-wrap;
+    word-break: break-all;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* Forms & Inputs */
+form {
+    background: white;
+    padding: 3rem;
+    border: var(--border-width) solid var(--text-color);
+    box-shadow: 12px 12px 0px 0px var(--accent-blue);
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 10;
+}
+
+form::before {
+    content: "AUTHORIZED PERSONNEL ONLY";
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background: var(--accent-yellow);
+    padding: 0 10px;
+    border: 2px solid var(--text-color);
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+input {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    padding: 0.8rem;
+    border: 3px solid var(--text-color);
+    background: var(--bg-color);
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+input:focus {
+    background: var(--accent-yellow);
+    box-shadow: 4px 4px 0px 0px var(--text-color);
+    transform: translate(-4px, -4px);
+}
+
+/* Buttons */
+button {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    background: var(--accent-red);
+    color: white;
+    border: var(--border-width) solid var(--text-color);
+    padding: 1rem 2rem;
+    cursor: pointer;
+    box-shadow: var(--brutal-shadow);
+    transition: all 0.1s ease;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0px 0px var(--text-color);
+    background: var(--accent-yellow);
+    color: var(--text-color);
+}
+
+button:active {
+    transform: translate(6px, 6px);
+    box-shadow: 0px 0px 0px 0px var(--text-color);
+}
+
+/* Dashboard specific layout */
+body > div {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 1rem;
+}
+
+body > div button {
+    background: white;
+    color: var(--text-color);
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body > div button:hover {
+    background: var(--text-color);
+    color: white;
+    box-shadow: 8px 8px 0px 0px var(--accent-red);
+}
+
+/* Footers and random spans */
+#footer {
+    margin-top: auto;
+    padding: 1rem 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    background: var(--text-color);
+    color: var(--accent-yellow);
+    border: 3px solid var(--text-color);
+    box-shadow: 6px 6px 0px 0px var(--accent-red);
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+#username {
+    background: var(--accent-yellow);
+    color: var(--text-color);
+    padding: 0 10px;
+    border: 2px solid var(--text-color);
+    display: inline-block;
+    transform: rotate(2deg);
 }

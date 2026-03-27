@@ -5,12 +5,11 @@
     </head>
     <body>
         <h1>Hi, <span id="username">nobody</span>!</h1>
-        <p>you are an innocent bystander! grab your favorite snack, sit down, and kick back as you watch the latest episode of Geopolitical Drama w/ AI-Powered Nukes unfold.</p>
+        <p>you're just an innocent bystander! grab your favorite snack, sit down, and kick back as you watch the latest episode of Geopolitical Drama w/ AI-Powered Nukes unfold.</p>
         <span id="footer"></span>
     </body>
     <script>
         const footer = document.getElementById("footer");
-        const repoUrl = "https://github.com/TechDudie/ConflictCampaign";
 
         async function setBuildFooter() {
             try {
@@ -21,9 +20,9 @@
 
                 const commits = await response.json();
                 const sha = (commits[0]?.sha || "unknown").slice(0, 7);
-                footer.innerHTML = `<a href="${repoUrl}" target="_blank" rel="noopener noreferrer">Build ${sha} from 6 or 7 hours ago.</a>`;
+                footer.innerHTML = `Build ${sha} from 6 or 7 hours ago.`;
             } catch (error) {
-                footer.innerHTML = `<a href="${repoUrl}" target="_blank" rel="noopener noreferrer">Build unknown from 6 or 7 hours ago.</a>`;
+                footer.innerHTML = `Build unknown from 6 or 7 hours ago.`;
             }
         }
 
