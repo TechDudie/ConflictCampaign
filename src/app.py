@@ -6,7 +6,7 @@ import hashlib
 import jwt
 import math
 from pydantic import BaseModel
-from pyotp import random_base32 as baller, TOTP as authy
+from pyotp import random_base32 as baller, TOTP
 import sqlite3
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from typing import Optional
@@ -41,7 +41,6 @@ def roller():
 def dber() -> sqlite3.Connection:
     return sqlite3.connect("default.db")
 
-# keep in mind init will be run 8 times bc 8 workers, but that's fine since sqlite will handle it
 db = dber()
 db.execute("PRAGMA journal_mode=WAL;")
 db.execute(
@@ -168,23 +167,27 @@ async def _register_user(
 ):
     return JSONResponse(content={"message": "fuh nah we hate gracious professionalism"}, status_code=403)
 
-class auther(BaseModel):
+class NuclearLaunchCodeInterface(BaseModel):
     code: str
 
+# REALLY SUPER DUPER IMPORTANT API ENDPOINT!!!
 @app.post("/api/launch-ai-powered-nukes")
 async def _launch_ai_powered_nukes(
     token: Optional[str] = Cookie(None),
     role: Optional[str] = Cookie(None),
-    auth: auther = None
+    auth: NuclearLaunchCodeInterface = None
 ):
     if not auth:
         raise FastAPIHTTPException(status_code=400, detail="woah there buddy ts aint cutting it")
     
     cursor = dber().cursor()
     cursor.execute("SELECT value FROM settings WHERE key = 'COMMON_BALL'")
-    if not authy(cursor.fetchone()[0]).verify(auth.code):
+    # Time-based One-Time Password (TOTP) is an algorithm (RFC 6238) that generates temporary, 6-8 digit numeric codes used for two-factor authentication (2FA).
+    # It enhances security by requiring both a password and a code that changes every 30-60 seconds, generated via a shared secret key and the current time on a device.
+    if not TOTP(cursor.fetchone()[0]).verify(auth.code):
         raise FastAPIHTTPException(status_code=403, detail="nuh uh youre getting slimed out\nts code was NOT it")
-
-    if role != roller():
+    
+    # only the big boss can launch the nukes, sorry not sorry
+    if role != "BIGYAHU":
         raise FastAPIHTTPException(status_code=403, detail="we can't be launching AI-POWERED nukes just like that, yk?")
-    return JSONResponse(content={"message": "nukes launched successfully!\nwe're all dead! happy now?\nihms{mUTu@llY_@$$Ur3d_D3$$tRuC+10n}"}, status_code=200)
+    return JSONResponse(content={"message": "nukes launched successfully!\nwe're all dead! happy now?"}, status_code=200)

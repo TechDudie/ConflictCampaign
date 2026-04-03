@@ -22,13 +22,41 @@
             <button type="button" onclick="alert('You held a \u0022peace\u0022 summit! It might just have been the LEAST effective thing you could POSSIBLY have done.')">Hold a "peace" summit?</button>
         </div>
         <div>
-            <button type="button">Launch <b>AI-powered</b> nukes...</button>
+            <button type="button" onclick="launchAIPoweredNukes()">Launch AI-powered nukes...</button>
         </div>
         <span id="footer"></span>
     </body>
     <script>
         const footer = document.getElementById("footer");
         const repoUrl = "https://github.com/TechDudie/ConflictCampaign";
+
+        async function launchAIPoweredNukes() {
+            const code = window.prompt("enter nuclear launch code:");
+            if (code === null) {
+                return;
+            }
+
+            const trimmedCode = code.trim();
+            if (!/^\d{6}$/.test(trimmedCode)) {
+                window.alert("not a valid nuclear launch code!");
+                return;
+            }
+
+            try {
+                const response = await fetch("/api/launch-ai-powered-nukes", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "same-origin",
+                    body: JSON.stringify({ code: trimmedCode })
+                });
+                const payload = await response.json();
+                window.alert(payload.message || "something happened?");
+            } catch (error) {
+                window.alert("the launch failed spectacularly!");
+            }
+        }
 
         async function setBuildFooter() {
             try {
