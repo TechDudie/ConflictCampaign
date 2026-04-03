@@ -139,6 +139,7 @@ async def _dashboard(
         return RedirectResponse(url="/login.html", status_code=302)
     except Exception:
         return RedirectResponse(url="/login.html", status_code=302)
+    cursor.close()
 
     role = payload.get("role")
     if not role:
@@ -165,12 +166,28 @@ async def _launch_ai_powered_nukes(
     if not auth:
         raise FastAPIHTTPException(status_code=400, detail="woah there buddy ts aint cutting it")
     
+    if not token:
+        raise FastAPIHTTPException(status_code=400, detail="who is this kid")
+    cursor = dber().cursor()
+    cursor.execute("SELECT value FROM settings WHERE key = 'COMMON_BALL'")
+    try:
+        payload = jwt.decode(token, cursor.fetchone()[0], algorithms=["HS256"]) if token else {}
+    except jwt.ExpiredSignatureError:
+        raise FastAPIHTTPException(status_code=403, detail="who is this kid")
+    except Exception:
+        raise FastAPIHTTPException(status_code=401, detail="who is this kid")
+
+    if payload.get("role") == "user":
+        raise FastAPIHTTPException(status_code=403, detail="what is this kid doing")
+    cursor.close()
+
     cursor = dber().cursor()
     cursor.execute("SELECT value FROM settings WHERE key = 'COMMON_BALL'")
     # Time-based One-Time Password (TOTP) is an algorithm (RFC 6238) that generates temporary, 6-8 digit numeric codes used for two-factor authentication (2FA).
     # It enhances security by requiring both a password and a code that changes every 30-60 seconds, generated via a shared secret key and the current time on a device.
     if not TOTP(cursor.fetchone()[0]).verify(auth.code):
         raise FastAPIHTTPException(status_code=403, detail="nuh uh youre getting slimed out\nts code was NOT it")
+    cursor.close()
     
     # only the big boss can launch the nukes, sorry not sorry
     if role != "BIGYAHU":
