@@ -124,6 +124,131 @@ label {
 }
 
 input {
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&display=swap');
+
+:root {
+    --bg-color: #f0f0ed;
+    --text-color: #111111;
+    --accent-red: #ff3333;
+    --accent-blue: #0055ff;
+    --accent-yellow: #ffff00;
+    --border-width: 4px;
+    --brutal-shadow: 6px 6px 0px 0px var(--text-color);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: radial-gradient(var(--text-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: var(--text-color);
+    font-family: 'JetBrains Mono', monospace;
+    margin: 0;
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Unbounded', sans-serif;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin-top: 0;
+    text-align: center;
+    background: var(--text-color);
+    color: var(--bg-color);
+    padding: 1rem 2rem;
+    border: var(--border-width) solid var(--text-color);
+    box-shadow: 10px 10px 0px 0px var(--accent-red);
+    transform: rotate(-1deg);
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 800px;
+}
+
+h3 i {
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: normal;
+}
+
+p, pre, span, label {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+p {
+    background: white;
+    padding: 1rem 2rem;
+    border: 3px solid var(--text-color);
+    box-shadow: 6px 6px 0px 0px var(--accent-blue);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+pre {
+    background: var(--text-color);
+    color: var(--accent-yellow);
+    padding: 1rem;
+    border-radius: 0;
+    border: var(--border-width) solid var(--text-color);
+    box-shadow: var(--brutal-shadow);
+    white-space: pre-wrap;
+    word-break: break-all;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* Forms & Inputs */
+form {
+    background: white;
+    padding: 3rem;
+    border: var(--border-width) solid var(--text-color);
+    box-shadow: 12px 12px 0px 0px var(--accent-blue);
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 10;
+}
+
+form::before {
+    content: "AUTHORIZED PERSONNEL ONLY";
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background: var(--accent-yellow);
+    padding: 0 10px;
+    border: 2px solid var(--text-color);
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+input {
     font-family: 'JetBrains Mono', monospace;
     font-size: 1.2rem;
     padding: 0.8rem;

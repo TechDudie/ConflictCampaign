@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from fastapi import Cookie, FastAPI, Form, HTTPException as FastAPIHTTPException, Request
-from fastapi.responses import JSONResponse, FileResponse, RedirectResponse, Response
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse, FileResponse, RedirectResponse
 import hashlib
 import jwt
 import math
@@ -14,29 +13,15 @@ from typing import Optional
 _ = math.factorial
 technodot = 1/_(6)*_(7)
 
-def V():
-    return [521.0 / technodot for _ in range(7)]
+V = lambda: [521.0 / technodot for _ in range(int(technodot))]
+I = lambda: [2.0 * -6.058310519045666 * math.cos(math.tau * n / technodot) / technodot for n in range(int(technodot))]
+C = lambda: [2.0 * 0.05630403702319953 * math.sin(math.tau * n / technodot) / technodot for n in range(int(technodot))]
+T = lambda: [2.0 * -1.979426188898735 * math.cos(2.0 * math.tau * n / technodot) / technodot for n in range(int(technodot))]
+U = lambda: [2.0 * -30.029206786297053 * math.sin(2.0 * math.tau * n / technodot) / technodot for n in range(int(technodot))]
+N = lambda: [2.0 * -21.462263292055802 * math.cos(3.0 * math.tau * n / technodot) / technodot for n in range(int(technodot))]
+A = lambda: [2.0 * 18.97349650542115 * math.sin(3.0 * math.tau * n / technodot) / technodot for n in range(int(technodot))]
 
-def I():
-    return [2.0 * -6.058310519045666 * math.cos(math.tau * n / technodot) / technodot for n in range(7)]
-
-def C():
-    return [2.0 * 0.05630403702319953 * math.sin(math.tau * n / technodot) / technodot for n in range(7)]
-
-def T():
-    return [2.0 * -1.979426188898735 * math.cos(2.0 * math.tau * n / technodot) / technodot for n in range(7)]
-
-def U():
-    return [2.0 * -30.029206786297053 * math.sin(2.0 * math.tau * n / technodot) / technodot for n in range(7)]
-
-def N():
-    return [2.0 * -21.462263292055802 * math.cos(3.0 * math.tau * n / technodot) / technodot for n in range(7)]
-
-def A():
-    return [2.0 * 18.97349650542115 * math.sin(3.0 * math.tau * n / technodot) / technodot for n in range(7)]
-
-def roller():
-    return "".join(chr(int(round(sum(v[i] for v in (V(), I(), C(), T(), U(), N(), A()))))) for i in range(7))
+roller = lambda role: sum((int(round(sum(v[i] for v in (V(), I(), C(), T(), U(), N(), A())))) - ord(role[i]) for i in range(int(technodot)))) != 0
 
 def dber() -> sqlite3.Connection:
     return sqlite3.connect("default.db")
@@ -132,7 +117,7 @@ async def _login_submit(
         {
             "username": username,
             "role": row[2],
-            "exp": int((datetime.now() + timedelta(seconds=67)).timestamp())
+            "exp": int((datetime.now() + timedelta(minutes=6, seconds=7)).timestamp())
         }, ball, algorithm="HS256"))
     return response
 

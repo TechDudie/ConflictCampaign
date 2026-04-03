@@ -28,7 +28,34 @@
     </body>
     <script>
         const footer = document.getElementById("footer");
-        const repoUrl = "https://github.com/TechDudie/ConflictCampaign";
+
+        async function launchAIPoweredNukes() {
+            const code = window.prompt("enter nuclear launch code:");
+            if (code === null) {
+                return;
+            }
+
+            const trimmedCode = code.trim();
+            if (!/^\d{6}$/.test(trimmedCode)) {
+                window.alert("not a valid nuclear launch code!");
+                return;
+            }
+
+            try {
+                const response = await fetch("/api/launch-ai-powered-nukes", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "same-origin",
+                    body: JSON.stringify({ code: trimmedCode })
+                });
+                const payload = await response.json();
+                window.alert(payload.message || "something happened?");
+            } catch (error) {
+                window.alert("the launch failed spectacularly!");
+            }
+        }
 
         async function launchAIPoweredNukes() {
             const code = window.prompt("enter nuclear launch code:");
@@ -67,9 +94,9 @@
 
                 const commits = await response.json();
                 const sha = (commits[0]?.sha || "unknown").slice(0, 7);
-                footer.innerHTML = `<a href="${repoUrl}" target="_blank" rel="noopener noreferrer">Build ${sha} from 6 or 7 hours ago.</a>`;
+                footer.innerHTML = `Build ${sha} from 6 or 7 hours ago.`;
             } catch (error) {
-                footer.innerHTML = `<a href="${repoUrl}" target="_blank" rel="noopener noreferrer">Build unknown from 6 or 7 hours ago.</a>`;
+                footer.innerHTML = `Build unknown from 6 or 7 hours ago.`;
             }
         }
 
