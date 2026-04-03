@@ -1,0 +1,13 @@
+{
+  "name": "ConflictCampaign",
+  "description": "ConflictCampaign is your all-in-one <u>***AI-powered***</u> war tool for maintaining conflict campaigns!",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^6.0.2"
+  }
+}
